@@ -49,7 +49,7 @@ export const AcademicInformation = () => {
                   label='Class'
                   labelId='class'
                   notched
-                  value={value}
+                  value={value ?? ''}
                   onChange={(event) => onChange(event.target.value)}
                 >
                   {classes.map(({ name }) => (
@@ -64,7 +64,7 @@ export const AcademicInformation = () => {
           />
         </FormControl>
         <FormControl size='small' sx={{ width: '150px' }} error={Boolean(errors.section)}>
-          <InputLabel id='class' shrink>
+          <InputLabel id='section' shrink>
             Section
           </InputLabel>
           <Controller
@@ -75,12 +75,12 @@ export const AcademicInformation = () => {
                 <Select
                   label='Section'
                   labelId='section'
-                  value={value}
+                  value={value ?? ''}
                   onChange={(e) => onChange(e.target.value)}
                   notched
                 >
                   {isLoading ? (
-                    <>loading...</>
+                    <MenuItem disabled>loading...</MenuItem>
                   ) : (
                     data?.sections?.map(({ name }) => (
                       <MenuItem value={name} key={name}>
@@ -119,7 +119,7 @@ export const AcademicInformation = () => {
                   }
                 }}
                 format={DATE_FORMAT}
-                value={typeof value === 'string' ? parseISO(value) : value}
+                value={value ? (typeof value === 'string' ? parseISO(value) : value) : null}
                 onChange={(value) => onChange(value)}
               />
             )}

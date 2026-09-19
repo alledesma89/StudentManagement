@@ -14,8 +14,9 @@ const findAllStudents = async (payload) => {
             t1.id,
             t1.name,
             t1.email,
+            'Student' AS "role",
             t1.last_login AS "lastLogin",
-            t1.is_active AS "systemAccess"
+            COALESCE(t1.is_active, false) AS "systemAccess"
         FROM users t1
         LEFT JOIN user_profiles t3 ON t1.id = t3.user_id
         WHERE t1.role_id = 3`;
@@ -56,13 +57,13 @@ const findStudentDetail = async (id) => {
             u.id,
             u.name,
             u.email,
-            u.is_active AS "systemAccess",
+            COALESCE(u.is_active, false) AS "systemAccess",
             p.phone,
             p.gender,
             p.dob,
             p.class_name AS "class",
             p.section_name AS "section",
-            p.roll,
+            COALESCE(p.roll::text, '') AS "roll",
             p.father_name AS "fatherName",
             p.father_phone AS "fatherPhone",
             p.mother_name AS "motherName",
@@ -111,11 +112,21 @@ const findStudentToUpdate = async (paylaod) => {
     return rows;
 }
 
+const deleteStudentById = async (id) => {
+    const deleteProfileQuery = "DELETE FROM user_profiles WHERE user_id = $1";
+    await processDBRequest({ query: deleteProfileQuery, queryParams: [id] });
+
+    const deleteUserQuery = "DELETE FROM users WHERE id = $1 AND role_id = 3 RETURNING id";
+    const { rowCount } = await processDBRequest({ query: deleteUserQuery, queryParams: [id] });
+    return rowCount;
+}
+
 module.exports = {
     getRoleId,
     findAllStudents,
     addOrUpdateStudent,
     findStudentDetail,
     findStudentToSetStatus,
-    findStudentToUpdate
+    findStudentToUpdate,
+    deleteStudentById,
 };

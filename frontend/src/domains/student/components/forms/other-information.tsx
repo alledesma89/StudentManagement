@@ -22,7 +22,7 @@ export const OtherInformation = () => {
                 name='systemAccess'
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Radio checked={value} onChange={() => onChange(true)} />
+                  <Radio checked={Boolean(value)} onChange={() => onChange(true)} />
                 )}
               />
             }
@@ -35,7 +35,7 @@ export const OtherInformation = () => {
                 name='systemAccess'
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Radio checked={!value} onChange={() => onChange(false)} />
+                  <Radio checked={!Boolean(value)} onChange={() => onChange(false)} />
                 )}
               />
             }

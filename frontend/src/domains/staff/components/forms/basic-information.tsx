@@ -58,7 +58,7 @@ export const BasicInformation = () => {
                 <Select
                   label='Role'
                   labelId='role'
-                  value={value}
+                  value={value ?? ''}
                   onChange={(e) => onChange(e.target.value)}
                   notched
                 >
@@ -85,7 +85,7 @@ export const BasicInformation = () => {
                 <Select
                   label='Gender'
                   labelId='gender'
-                  value={value}
+                  value={value ?? ''}
                   onChange={(e) => onChange(e.target.value)}
                   notched
                 >
@@ -102,7 +102,7 @@ export const BasicInformation = () => {
         </FormControl>
         <FormControl size='small' sx={{ width: '150px' }}>
           <InputLabel id='maritalStatus' shrink>
-            Mairtal Status
+            Marital Status
           </InputLabel>
           <Controller
             name='maritalStatus'
@@ -110,9 +110,9 @@ export const BasicInformation = () => {
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <>
                 <Select
-                  label='>Mairtal Status'
+                  label='Marital Status'
                   labelId='maritalStatus'
-                  value={value}
+                  value={value ?? ''}
                   onChange={(e) => onChange(e.target.value)}
                   notched
                 >
@@ -130,8 +130,8 @@ export const BasicInformation = () => {
         <Box>
           <TextField
             {...register('phone')}
-            error={Boolean(errors?.gender)}
-            helperText={errors?.gender?.message}
+            error={Boolean(errors?.phone)}
+            helperText={errors?.phone?.message}
             label='Phone Number'
             size='small'
             slotProps={{
@@ -173,7 +173,7 @@ export const BasicInformation = () => {
               <DatePicker
                 label='Birth Date'
                 format={DATE_FORMAT}
-                value={typeof value === 'string' ? parseISO(value) : value}
+                value={value ? (typeof value === 'string' ? parseISO(value) : value) : null}
                 onChange={(dt) => onChange(dt)}
                 slotProps={{
                   textField: {
@@ -194,7 +194,7 @@ export const BasicInformation = () => {
               <DatePicker
                 label='Join Date'
                 format={DATE_FORMAT}
-                value={typeof value === 'string' ? parseISO(value) : value}
+                value={value ? (typeof value === 'string' ? parseISO(value) : value) : null}
                 onChange={(dt) => onChange(dt)}
                 slotProps={{
                   textField: {

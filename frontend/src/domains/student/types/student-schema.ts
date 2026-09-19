@@ -9,39 +9,40 @@ export const StudentFilterSchema = z.object({
 
 export const BasicInfoSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  gender: z.string().min(1, 'Gender is required'),
-  dob: z.union([z.date(), z.string()]),
-  phone: z.string().min(1, 'Phone is required'),
+  gender: z.string().optional().nullable(),
+  dob: z.union([z.date(), z.string()]).optional().nullable(),
+  phone: z.string().optional().nullable(),
   email: z.string().min(1, 'Email is required')
 });
 
 export const AcademicInfoSchema = z.object({
-  class: z.string().min(1, 'Class is required'),
-  section: z.string(),
-  roll: z.string().min(1, 'Roll is required'),
-  admissionDate: z.union([z.date(), z.string()])
+  class: z.string().optional().nullable(),
+  section: z.string().optional().nullable(),
+  roll: z.string().optional().nullable(),
+  admissionDate: z.union([z.date(), z.string()]).optional().nullable()
 });
 
 export const AddressInfoSchema = z.object({
-  currentAddress: z.string().min(1, 'Current Address is required'),
-  permanentAddress: z.string().min(1, 'Permanent Address is required')
+  currentAddress: z.string().optional().nullable(),
+  permanentAddress: z.string().optional().nullable()
 });
 
 export const ParentsAndGuardianInfoSchema = z.object({
-  fatherName: z.string().min(1, 'Father Name is required'),
-  fatherPhone: z.string().optional(),
-  motherName: z.string().optional(),
-  motherPhone: z.string().optional(),
-  guardianName: z.string().min(1, 'Guardian Name is required'),
-  guardianPhone: z.string().min(1, 'Guardian Phone is required'),
-  relationOfGuardian: z.string().min(1, 'Relation of guardian is required')
+  fatherName: z.string().optional().nullable(),
+  fatherPhone: z.string().optional().nullable(),
+  motherName: z.string().optional().nullable(),
+  motherPhone: z.string().optional().nullable(),
+  guardianName: z.string().optional().nullable(),
+  guardianPhone: z.string().optional().nullable(),
+  relationOfGuardian: z.string().optional().nullable()
 });
 
 export const OtherInfoSchema = z.object({
-  systemAccess: z.boolean()
+  systemAccess: z.boolean().optional()
 });
 
 export const StudentSchema = BasicInfoSchema.extend(AcademicInfoSchema.shape)
   .extend(AddressInfoSchema.shape)
   .extend(ParentsAndGuardianInfoSchema.shape)
   .extend(OtherInfoSchema.shape);
+
