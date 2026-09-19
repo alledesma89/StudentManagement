@@ -1,6 +1,9 @@
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const env = {
-  PORT: process.env.PORT,
+  PORT: process.env.PORT || 5007,
   DATABASE_URL: process.env.DATABASE_URL,
   JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET,
   JWT_REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_TOKEN_SECRET,
@@ -18,5 +21,9 @@ const env = {
   COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
 };
+
+if (!env.DATABASE_URL) {
+  throw new Error("FATAL: DATABASE_URL environment variable is missing in configuration.");
+}
 
 module.exports = { env };
