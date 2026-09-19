@@ -96,7 +96,7 @@ export const BasicInformation = () => {
                   }
                 }}
                 format={DATE_FORMAT}
-                value={typeof value === 'string' ? parseISO(value) : value}
+                value={value ? (typeof value === 'string' ? parseISO(value) : value) : null}
                 onChange={(newDt) => onChange(newDt)}
               />
             )}
@@ -114,7 +114,7 @@ export const BasicInformation = () => {
                 <Select
                   label='Gender'
                   labelId='gender'
-                  value={value}
+                  value={value ?? ''}
                   onChange={(e) => onChange(e.target.value)}
                   notched
                 >

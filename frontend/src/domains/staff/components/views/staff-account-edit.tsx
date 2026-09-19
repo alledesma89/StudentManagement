@@ -23,12 +23,13 @@ import {
 } from '../forms';
 import { useUpdateStaffMutation } from '../../api/staff-api';
 
+import { API_DATE_FORMAT, getFormattedDate } from '@/utils/helpers/date';
+
 type StaffAccountEditProps = {
   id?: string;
   redirectPath: string;
   heading: string;
 };
-type StaffDetailValue<T> = T extends { [key: string]: infer U } ? U : never;
 
 export const StaffAccountEdit: React.FC<StaffAccountEditProps> = ({
   id,
@@ -46,23 +47,32 @@ export const StaffAccountEdit: React.FC<StaffAccountEditProps> = ({
 
   React.useEffect(() => {
     if (staffDetail) {
-      const { setValue } = methods;
-      for (const [key, value] of Object.entries(staffDetail) as [
-        keyof StaffFormProps,
-        StaffDetailValue<StaffFormProps>
-      ][]) {
+      const formattedValues: Record<string, any> = {};
+      for (const [key, value] of Object.entries(staffDetail)) {
         if (['dob', 'joinDate'].includes(key)) {
-          setValue(key, typeof value === 'string' ? parseISO(value) : value);
+          formattedValues[key] =
+            value && typeof value === 'string' ? parseISO(value) : (value ?? null);
+        } else if (typeof value === 'boolean') {
+          formattedValues[key] = value;
         } else {
-          setValue(key, value);
+          formattedValues[key] = value ?? '';
         }
       }
+      methods.reset(formattedValues as StaffFormProps);
     }
   }, [staffDetail, methods]);
 
   const onUpdateStaff = async (data: StaffFormProps) => {
     try {
-      const result = await updateStaff({ id: Number(id)!, ...data }).unwrap();
+      const { dob, joinDate, ...rest } = data;
+      const payload = {
+        ...rest,
+        id: Number(id)!,
+        dob: dob ? getFormattedDate(dob, API_DATE_FORMAT) : null,
+        joinDate: joinDate ? getFormattedDate(joinDate, API_DATE_FORMAT) : null
+      };
+
+      const result = await updateStaff(payload).unwrap();
       toast.info(result.message);
       navigate(redirectPath);
     } catch (error) {

@@ -23,12 +23,13 @@ import { StudentSchema } from '../../types/student-schema';
 import { useGetStudentDetail } from '../../hooks';
 import { useUpdateStudentMutation } from '../../api/student-api';
 
+import { API_DATE_FORMAT, getFormattedDate } from '@/utils/helpers/date';
+
 type StudentAccountEditProps = {
   heading: string;
   id?: string;
   redirectPath: string;
 };
-type StudentDetailValue<T> = T extends { [key: string]: infer U } ? U : never;
 
 export const StudentAccountEdit: React.FC<StudentAccountEditProps> = ({
   id,
@@ -46,23 +47,32 @@ export const StudentAccountEdit: React.FC<StudentAccountEditProps> = ({
 
   React.useEffect(() => {
     if (studentDetail) {
-      const { setValue } = methods;
-      for (const [key, value] of Object.entries(studentDetail) as [
-        keyof StudentProps,
-        StudentDetailValue<StudentProps>
-      ][]) {
+      const formattedValues: Record<string, any> = {};
+      for (const [key, value] of Object.entries(studentDetail)) {
         if (['admissionDate', 'dob'].includes(key)) {
-          setValue(key, typeof value === 'string' ? parseISO(value) : value);
+          formattedValues[key] =
+            value && typeof value === 'string' ? parseISO(value) : (value ?? null);
+        } else if (typeof value === 'boolean') {
+          formattedValues[key] = value;
         } else {
-          setValue(key, value);
+          formattedValues[key] = value ?? '';
         }
       }
+      methods.reset(formattedValues as StudentProps);
     }
   }, [studentDetail, methods]);
 
   const onUpdate = async (data: StudentProps) => {
     try {
-      const result = await updateStudent({ id: Number(id!), ...data }).unwrap();
+      const { dob, admissionDate, ...rest } = data;
+      const payload = {
+        ...rest,
+        id: Number(id!),
+        dob: dob ? getFormattedDate(dob, API_DATE_FORMAT) : null,
+        admissionDate: admissionDate ? getFormattedDate(admissionDate, API_DATE_FORMAT) : null
+      };
+
+      const result = await updateStudent(payload).unwrap();
       toast.info(result.message);
       navigate(redirectPath);
     } catch (error) {

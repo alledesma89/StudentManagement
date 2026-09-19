@@ -15,64 +15,64 @@ type StudentProfileProps = {
 export const StudentProfile: React.FC<StudentProfileProps> = ({ id }) => {
   const student = useGetStudentDetail(id);
   const {
-    name,
-    email,
-    class: className,
-    section,
-    phone,
-    dob,
-    gender,
-    roll,
-    admissionDate,
-    currentAddress,
-    permanentAddress,
-    fatherName,
+    name = '',
+    email = '',
+    class: className = '',
+    section = '',
+    phone = '',
+    dob = '',
+    gender = '',
+    roll = '',
+    admissionDate = '',
+    currentAddress = '',
+    permanentAddress = '',
+    fatherName = '',
     fatherPhone,
     motherName,
     motherPhone,
-    guardianName,
-    guardianPhone,
-    relationOfGuardian,
-    systemAccess,
-    reporterName
-  } = student;
+    guardianName = '',
+    guardianPhone = '',
+    relationOfGuardian = '',
+    systemAccess = false,
+    reporterName = ''
+  } = student || {};
 
   return (
     <Grid2 container spacing={3}>
       <Grid2 size={{ xs: 12, md: 5 }}>
         <MiniAvatar
-          name={name}
-          phone={phone}
-          email={email}
-          selectedClass={className}
-          section={section}
+          name={name ?? ''}
+          phone={phone ?? ''}
+          email={email ?? ''}
+          selectedClass={className ?? ''}
+          section={section ?? ''}
         />
       </Grid2>
       <Grid2 size={{ xs: 12, md: 7 }}>
         <PersonalDetail
-          dob={dob}
-          gender={gender}
-          roll={roll}
-          admissionDate={admissionDate}
-          currentAddress={currentAddress}
-          permanentAddress={permanentAddress}
+          dob={dob ?? ''}
+          gender={gender ?? ''}
+          roll={roll ?? ''}
+          admissionDate={admissionDate ?? ''}
+          currentAddress={currentAddress ?? ''}
+          permanentAddress={permanentAddress ?? ''}
         />
       </Grid2>
       <Grid2 size={{ xs: 12, md: 5 }}></Grid2>
       <Grid2 size={{ xs: 12, md: 7 }}>
         <ParentsAndGuardianInformation
-          fatherName={fatherName}
-          fatherPhone={fatherPhone}
-          motherName={motherName}
-          motherPhone={motherPhone}
-          guardianName={guardianName}
-          guardianPhone={guardianPhone}
-          relationOfGuardian={relationOfGuardian}
+          fatherName={fatherName ?? ''}
+          fatherPhone={fatherPhone ?? undefined}
+          motherName={motherName ?? undefined}
+          motherPhone={motherPhone ?? undefined}
+          guardianName={guardianName ?? ''}
+          guardianPhone={guardianPhone ?? ''}
+          relationOfGuardian={relationOfGuardian ?? ''}
         />
       </Grid2>
       <Grid2 size={{ xs: 12, md: 5 }}></Grid2>
       <Grid2 size={{ xs: 12, md: 7 }}>
-        <Others systemAccess={systemAccess} reporterName={reporterName} />
+        <Others systemAccess={Boolean(systemAccess)} reporterName={reporterName ?? ''} />
       </Grid2>
     </Grid2>
   );
